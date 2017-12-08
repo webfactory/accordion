@@ -1,0 +1,42 @@
+# wfAccordion
+A jQuery plugin for enhancement of predefined markup with accessible and keyboard-enabled accordion functionality.
+
+## Usage
+Required HTML structure:
+```
+<div class="wf-accordion js-accordion">
+    <div class="wf-accordion__header js-accordion__header">
+        <div class="wf-accordion__trigger js-accordion-trigger">Titel</div>
+    </div>
+    <div class="wf-accordion__panel js-accordion__panel">Text</div>
+</div>
+```
+
+You can initiate wfAccordion like any jQuery plugin:
+```
+$('.js-accordion').wfAccordion({ …options… });
+```
+
+## Settings
+Option | Type | Default | Description
+------ | ---- | ------- | -----------
+context | string | 'body' | Defines the context inside which the plugin looks for accordion headers.
+accordionHeader | string | '.js-accordion__header' | Class hook for the accordion header container.
+accordionTrigger | string | '.js-accordion__trigger' | Class hook for the accordion title (a child of the header container). This element is transformed to a `<button>` by the plugin for accessibility reasons.
+accordionPanel | string | '.js-accordion__panel' | Class hook for the accordion panel. This element is typically hidden by the plugin until the accordion is opened by the user.
+accordionIsOpenClass | string | 'js-accordion--is-expanded' | A class to define whether an accordion should be expanded on startup. Note that this string has no preceding `.`.
+
+### Notes:
+- The accordion trigger can be any element (e.g. `<h2>`); you only need to be aware that this element is transformed
+  into a <button> by this plugin (your element is therefore only relevant for a no-js fallback). The visual design
+  should therefore depend on a class and not on the element!
+- The names of CSS- and JS-hook-classes are completely customizable, you only need to pass the latter (`.js-*`) to the
+  plugin via options if they differ from the defaults
+- You can set accordions to be expanded on initialization by applying a class to the outer container. 
+  The class is customizable via options (default: `.js-accordion--is-expanded`).
+
+### Keyboard support:
+- All interactive elements observe normal tab ⇥ order (accordion triggers are focussable, open panels allow focussing of links inside themselves)
+- Once an accordion receives focus, you can cycle through all accordions on the page with the arrow keys ↑↓
+- You can navigate to the first or last accordion on the page with Page Up ↖ or Page Down ↘ respectively.
+- Accordion triggers support Space and Enter ↵ keys for toggling of accordions.
