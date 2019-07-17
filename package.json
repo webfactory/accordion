@@ -1,6 +1,6 @@
 {
   "name": "webfactory-accordion",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A jQuery plugin for enhancement of predefined markup with accessible and keyboard-enabled accordion functionality.",
   "repository": {
     "type": "git",
