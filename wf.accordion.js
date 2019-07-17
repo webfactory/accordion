@@ -32,7 +32,7 @@
             var $triggerPlaceholder = $header.find(settings.accordionTrigger);
             var $panel = $header.next(settings.accordionPanel);
 
-            var $trigger = replaceWithButton($triggerPlaceholder);
+            var $trigger = enhanceWithButton($triggerPlaceholder);
 
             // Enhance triggers and panels with ARIA attributes
             $trigger.attr('aria-expanded', false);
@@ -68,7 +68,7 @@
             $trigger.on('keydown', function(event) {
                 var $target = $(event.target);
                 var key = event.which.toString();
-                var $header = $target.parent(settings.accordionHeader);
+                var $header = $target.parents(settings.accordionHeader);
 
                 // 33 = Page Up, 34 = Page Down
                 var ctrlModifier = (event.ctrlKey && key.match(/33|34/));
@@ -108,19 +108,26 @@
     };
 
     /**
-     * Replace a given placeholder element with <button> for better keyboard support
+     * Enhance a given placeholder element with a <button> for better keyboard support
      *
      * @param {jQuery} $placeholder
      * @returns {jQuery}
      */
-    function replaceWithButton($placeholder) {
+    function enhanceWithButton($placeholder) {
+        // Support the case that the placeholder may already be a button
+        if ($placeholder.get('0').nodeName && $placeholder.get('0').nodeName.toLowerCase() === 'button') {
+            return $placeholder;
+        }
+
         var $button = $('<button>' + $placeholder.text() + '</button>');
 
         $.each(getAttributes($placeholder), function(key, value) {
             $button.attr(key, value);
         });
 
-        $placeholder.replaceWith($button);
+        $placeholder.html($button);
+
+        removeAllAttributes($placeholder);
 
         return $button;
     }
@@ -130,13 +137,26 @@
      * @param {jQuery} $node
      * @returns {{}}
      */
-    function getAttributes ($node) {
+    function getAttributes($node) {
         var attrs = {};
         $.each( $node[0].attributes, function (index, attribute) {
             attrs[attribute.name] = attribute.value;
         } );
 
         return attrs;
+    }
+
+    /**
+     * Strip all HTML attributes (and their values) from a given jQuery object
+     * @param {jQuery} $node
+     */
+    function removeAllAttributes($node) {
+        // Support non-jQuery node objects, just in case…
+        var elem = $node instanceof jQuery ? $node.get('0') : $node;
+
+        while(elem.attributes.length > 0) {
+            elem.removeAttribute(elem.attributes[0].name);
+        }
     }
 
 })(jQuery);
