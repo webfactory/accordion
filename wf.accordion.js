@@ -116,11 +116,6 @@
             return this;
         },
 
-        sampleMethod: function() {
-            // eg. show the currently configured message
-            console.log(this.config.message);
-        },
-
         /**
          * Enhance a given placeholder element with a <button> for better keyboard support
          *
