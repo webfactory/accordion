@@ -10,7 +10,6 @@
 
     // constructor
     var Accordion = function(elem, options) {
-        this.elem = elem;
         this.$elem = $(elem);
         this.options = options;
     };
@@ -18,7 +17,7 @@
     // the plugin prototype
     Accordion.prototype = {
         defaults: {
-            context: 'body',
+            accordionGroup: '.js-accordion-group',
             accordionHeader: '.js-accordion__header',
             accordionTrigger: '.js-accordion__trigger',
             accordionPanel: '.js-accordion__panel',
@@ -30,20 +29,24 @@
             // globally or using an object literal.
             this.settings = $.extend({}, this.defaults, this.options);
 
-            var $context = $(this.settings.context);
-            var $accordionHeaders = $context.find(this.settings.accordionHeader);
+            var $accordionHeaders = this.$elem.find(this.settings.accordionHeader);
             var self = this;
 
             $accordionHeaders.each(function(index, header) {
                 var $header = $(header);
                 var $triggerPlaceholder = $header.find(self.settings.accordionTrigger);
                 var $panel = $header.next(self.settings.accordionPanel);
+                var isDisabled = typeof $header.attr('data-wf-accordion-disabled') !== 'undefined';
 
                 var $trigger = self.enhanceWithButton($triggerPlaceholder);
 
                 // Enhance triggers and panels with ARIA attributes
                 $trigger.attr('aria-expanded', false);
                 $panel.attr('aria-hidden', true);
+
+                if (isDisabled) {
+                    $trigger.attr('aria-disabled', true);
+                }
 
                 // Create unique IDs for use in ARIA relationships
                 var headerId = 'accordion-' + window.wfaccordion.counter + '__header-' + index;
@@ -67,8 +70,10 @@
                     var $target = $(event.target);
                     var state = $target.attr('aria-expanded') === 'false';
 
-                    $target.attr('aria-expanded', state);
-                    $('#' + $target.attr('aria-controls')).attr('aria-hidden', !state);
+                    if (!isDisabled) {
+                        $target.attr('aria-expanded', state);
+                        $('#' + $target.attr('aria-controls')).attr('aria-hidden', !state);
+                    }
                 });
 
                 // Enable keyboard support
