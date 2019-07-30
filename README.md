@@ -44,3 +44,12 @@ accordionIsOpenClass | string | 'js-accordion--is-expanded' | A class to define 
 - Once an accordion receives focus, you can cycle through all accordions on the page with the arrow keys ↑↓
 - You can navigate to the first or last accordion on the page with Page Up ↖ or Page Down ↘ respectively.
 - Accordion triggers support Space and Enter ↵ keys for toggling of accordions.
+
+## Credits, Copyright and License
+
+This bundle was started at webfactory GmbH, Bonn.
+
+- <https://www.webfactory.de>
+- <https://twitter.com/webfactory>
+
+Copyright 2019 webfactory GmbH, Bonn. Code released under [the MIT license](LICENSE).
