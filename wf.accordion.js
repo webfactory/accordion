@@ -52,7 +52,6 @@
      * @type {number}
      */
     window.wfaccordion = window.wfaccordion || {};
-    window.wfaccordion.counter = window.wfaccordion.counter || 0;
     window.wfaccordion.slugs = [];
 
     // constructor
@@ -102,25 +101,19 @@
 
                 // Create unique IDs for use in ARIA relationships
                 var headerId, panelId;
+                var accordionSlug = $root.attr('id') || slugify($trigger.text());
+                var slugOccurence = $.grep(window.wfaccordion.slugs, function (slug, index) {
+                    return slug.indexOf(accordionSlug) >= 0
+                }).length;
 
-                if (!self.settings.createIdFromHeaderText) {
-                    headerId = 'accordion-' + window.wfaccordion.counter + '__header-' + index;
-                    panelId = 'accordion-' + window.wfaccordion.counter +  '__panel-' + index;
+                if ($.inArray(accordionSlug, window.wfaccordion.slugs) === -1) {
+                    window.wfaccordion.slugs.push(accordionSlug);
+                    headerId = accordionSlug;
+                    panelId = accordionSlug + '-panel';
                 } else {
-                    var accordionSlug = slugify($trigger.text());
-                    var slugOccurence = $.grep(window.wfaccordion.slugs, function (slug, index) {
-                        return slug.indexOf(accordionSlug) >= 0
-                    }).length;
-
-                    if ($.inArray(accordionSlug, window.wfaccordion.slugs) === -1) {
-                        window.wfaccordion.slugs.push(accordionSlug);
-                        headerId = accordionSlug;
-                        panelId = accordionSlug + '-panel';
-                    } else {
-                        window.wfaccordion.slugs.push(accordionSlug + '-' + slugOccurence);
-                        headerId = accordionSlug + '-' + slugOccurence;
-                        panelId = accordionSlug + '-panel' + '-' + slugOccurence;
-                    }
+                    window.wfaccordion.slugs.push(accordionSlug + '-' + slugOccurence);
+                    headerId = accordionSlug + '-' + slugOccurence;
+                    panelId = accordionSlug + '-panel' + '-' + slugOccurence;
                 }
 
                 // Create ARIA relationships between headers and panels
@@ -185,9 +178,6 @@
                     }
                 });
             });
-
-            // Increment the counter with every instantiation of the plugin
-            window.wfaccordion.counter++;
 
             return this;
         },
