@@ -67,8 +67,7 @@
             accordionRoot: '.js-accordion',
             accordionHeader: '.js-accordion__header',
             accordionTrigger: '.js-accordion__trigger',
-            accordionPanel: '.js-accordion__panel',
-            createIdFromHeaderText: false
+            accordionPanel: '.js-accordion__panel'
         },
 
         init: function() {
