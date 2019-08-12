@@ -116,6 +116,8 @@
                     panelId = accordionSlug + '-panel' + '-' + slugOccurence;
                 }
 
+                $root.removeAttr('id'); // Prevent duplicated IDs on root and header element
+
                 // Create ARIA relationships between headers and panels
                 $trigger.attr('aria-controls', panelId);
                 $panel.attr('id', panelId);
@@ -133,7 +135,7 @@
                         $('#' + $target.attr('aria-controls')).attr('aria-hidden', !state);
                     }
 
-                    $(window).triggerHandler('wfAccordionClick', {
+                    $(window).trigger('wfAccordionClick', {
                         target: $target,
                         id: $target.attr('id'),
                         expanded: $target.attr('aria-expanded')
@@ -251,8 +253,12 @@
         if(!locationWithoutHash) return;
 
         var $trigger = $('[id=' + locationWithoutHash + ']');
+        var isExpandedOnStartup = typeof $trigger.closest('.js-accordion').attr('data-wf-accordion-expanded') !== 'undefined';
 
-        $trigger.trigger('click');
+        if (!isExpandedOnStartup) {
+            $trigger.trigger('click');
+        }
+        $trigger.focus();
     });
 
     $.fn.wfAccordion = function(options) {
