@@ -52,7 +52,7 @@
      * @type {number}
      */
     window.wfaccordion = window.wfaccordion || {};
-    window.wfaccordion.slugs = [];
+    window.wfaccordion.slugs = window.wfaccordion.slugs || [];
 
     // constructor
     var Accordion = function(elem, options) {
@@ -134,7 +134,7 @@
                         $('#' + $target.attr('aria-controls')).attr('aria-hidden', !state);
                     }
 
-                    $(window).trigger('wfAccordionClick', {
+                    $(this).trigger('wfAccordionClick', {
                         target: $target,
                         id: $target.attr('id'),
                         expanded: $target.attr('aria-expanded')
@@ -240,19 +240,19 @@
 
     // Provide expanding/navigate-to functionality via hash
     $(window).on('wfAccordionClick', function (event, data) {
-            var locationWithoutHash = getUrlHash();
+        var locationWithoutHash = getUrlHash();
 
-            if (data.expanded === 'true' && data.id !== locationWithoutHash) {
-                setUrlHash(data.id);
-            }
-        });
+        if (data.expanded === 'true' && data.id !== locationWithoutHash) {
+            setUrlHash(data.id);
+        }
+    });
 
     $(document).ready(function() {
         var locationWithoutHash = getUrlHash();
-        if(!locationWithoutHash) return;
+        if (!locationWithoutHash) return;
 
         var $trigger = $('[id=' + locationWithoutHash + ']');
-        var isExpandedOnStartup = typeof $trigger.closest('.js-accordion').attr('data-wf-accordion-expanded') !== 'undefined';
+        var isExpandedOnStartup = $trigger.closest('[data-wf-accordion-expanded]').length;
 
         if (!isExpandedOnStartup) {
             $trigger.trigger('click');
