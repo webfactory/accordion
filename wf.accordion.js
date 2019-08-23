@@ -247,11 +247,11 @@
         }
     });
 
-    $(document).ready(function() {
+    $(window).on('load', function() {
         var locationWithoutHash = getUrlHash();
         if (!locationWithoutHash) return;
 
-        var $trigger = $('[id=' + locationWithoutHash + ']');
+        var $trigger = $('#' + locationWithoutHash);
         var isExpandedOnStartup = $trigger.closest('[data-wf-accordion-expanded]').length;
 
         if (!isExpandedOnStartup) {
