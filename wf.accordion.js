@@ -254,8 +254,20 @@
     Accordion.defaults = Accordion.prototype.defaults;
 
     $.fn.wfAccordion = function(options) {
-        return this.each(function() {
+        var accordionGroupCount = this.length;
+
+        return this.each(function(index) {
             new Accordion(this, options).init();
+
+            // Throw event when the last accordion group was processed (and DOM manipulations are done)
+            // Use vanilla JS events because "jQuery can catch vanilla JS events, but vanilla JS cannot catch jQuery
+            // added events."
+            if (index === accordionGroupCount - 1) {
+                var ALL_ACCORDIONS_PROCESSED = document.createEvent('Event');
+
+                ALL_ACCORDIONS_PROCESSED.initEvent('wf.accordions.mounted', true, true);
+                window.dispatchEvent(ALL_ACCORDIONS_PROCESSED);
+            }
         });
     };
 
