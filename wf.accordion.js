@@ -1,10 +1,10 @@
 ;(function($, window, document, undefined) {
     'use strict';
 
-
     /**
-    * Returns the loaction hash minus the hash-symbol
-    */
+     * Returns the loaction hash minus the hash-symbol
+     * @returns {string}
+     */
     function getUrlHash() {
         return window.location.hash.replace('#', '');
     }
@@ -47,6 +47,16 @@
     }
 
     /**
+     * Check if Accordion is targeted by URL hash
+     *
+     * @param {jQuery} $trigger
+     * @returns {boolean}
+     */
+    function triggerIdMatchesUrlHash($trigger) {
+        return $trigger.attr('id') === getUrlHash();
+    }
+
+    /**
      * Create a counter (used a for creation of unique IDs)
      *
      * @type {number}
@@ -83,20 +93,8 @@
                 var $root = $(root);
                 var $header = $root.children($accordionHeaders);
                 var $triggerPlaceholder = $header.find(self.settings.accordionTrigger);
-                var $panel = $root.children(self.settings.accordionPanel);
-                var isDisabled = typeof $root.attr('data-wf-accordion-disabled') !== 'undefined';
-                var isExpandedOnStartup = typeof $root.attr('data-wf-accordion-expanded') !== 'undefined';
-
                 var $trigger = self.enhanceWithButton($triggerPlaceholder);
-
-                // Enhance triggers and panels with ARIA attributes
-                $trigger.attr('aria-expanded', false);
-                $panel.attr('aria-hidden', true);
-
-                // Handle initial accordion states
-                $trigger.attr('aria-disabled', isDisabled);
-                $trigger.attr('aria-expanded', isExpandedOnStartup);
-                $panel.attr('aria-hidden', !isExpandedOnStartup);
+                var $panel = $root.children(self.settings.accordionPanel);
 
                 // Create unique IDs for use in ARIA relationships
                 var headerId, panelId;
@@ -124,21 +122,34 @@
                 $trigger.attr('id', headerId);
                 $panel.attr('aria-labelledby', headerId);
 
+                var isDisabled = typeof $root.attr('data-wf-accordion-disabled') !== 'undefined';
+                var isTargetOfUrlHash = triggerIdMatchesUrlHash($trigger);
+                var isExpandedOnStartup = typeof $root.attr('data-wf-accordion-expanded') !== 'undefined' || isTargetOfUrlHash;
+
+                // Enhance triggers and panels with ARIA attributes
+                $trigger.attr('aria-expanded', false);
+                $panel.attr('aria-hidden', true);
+
+                // Handle initial accordion states
+                $trigger.attr('aria-disabled', isDisabled);
+                $trigger.attr('aria-expanded', isExpandedOnStartup);
+                $panel.attr('aria-hidden', !isExpandedOnStartup);
+
                 // Update ARIA states on click/tap
                 $trigger.on('click', function(event) {
                     var $target = $(event.target);
                     var state = $target.attr('aria-expanded') === 'false';
+                    var id = $target.attr('id');
 
                     if (!isDisabled) {
                         $target.attr('aria-expanded', state);
                         $('#' + $target.attr('aria-controls')).attr('aria-hidden', !state);
                     }
 
-                    $(this).trigger('wfAccordionClick', {
-                        target: $target,
-                        id: $target.attr('id'),
-                        expanded: $target.attr('aria-expanded')
-                    });
+                    // Update URL with hash when an accordion expands
+                    if ($target.attr('aria-expanded') === 'true' && id !== getUrlHash()) {
+                        setUrlHash(id);
+                    }
                 });
 
                 // Enable keyboard support
@@ -178,6 +189,10 @@
                         event.preventDefault();
                     }
                 });
+
+                if (isTargetOfUrlHash) {
+                    $trigger.focus();
+                }
             });
 
             return this;
@@ -237,28 +252,6 @@
     };
 
     Accordion.defaults = Accordion.prototype.defaults;
-
-    // Provide expanding/navigate-to functionality via hash
-    $(window).on('wfAccordionClick', function (event, data) {
-        var locationWithoutHash = getUrlHash();
-
-        if (data.expanded === 'true' && data.id !== locationWithoutHash) {
-            setUrlHash(data.id);
-        }
-    });
-
-    $(window).on('load', function() {
-        var locationWithoutHash = getUrlHash();
-        if (!locationWithoutHash) return;
-
-        var $trigger = $('#' + locationWithoutHash);
-        var isExpandedOnStartup = $trigger.closest('[data-wf-accordion-expanded]').length;
-
-        if (!isExpandedOnStartup) {
-            $trigger.trigger('click');
-        }
-        $trigger.focus();
-    });
 
     $.fn.wfAccordion = function(options) {
         return this.each(function() {
