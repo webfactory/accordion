@@ -18,10 +18,22 @@
      * @param {string} hash
      */
     function setUrlHash( hash ) {
-        if ( history.replaceState ) {
+        if (history.replaceState) {
             history.replaceState(null, '', '#' + hash);
         } else {
             location.hash = hash;
+        }
+    }
+
+    /**
+     * Use history.replaceState so clicking through accordions
+     * does not create dozens of new history entries.
+     * Browser back should navigate to the previous page
+     * regardless of how many accordions were activated.
+     */
+    function removeUrlHash() {
+        if (history.replaceState) {
+            history.replaceState(null, '', ' ');
         }
     }
 
@@ -149,6 +161,8 @@
                     // Update URL with hash when an accordion expands
                     if ($target.attr('aria-expanded') === 'true' && id !== getUrlHash()) {
                         setUrlHash(id);
+                    } else if ($target.attr('aria-expanded') === 'false') {
+                        removeUrlHash();
                     }
                 });
 
