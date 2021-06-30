@@ -137,7 +137,7 @@
 
                 // Update ARIA states on click/tap
                 $trigger.on('click', function(event) {
-                    var $target = $(event.target);
+                    var $target = $(event.target).closest('button');
                     var state = $target.attr('aria-expanded') === 'false';
                     var id = $target.attr('id');
 
@@ -210,7 +210,7 @@
                 return $placeholder;
             }
 
-            var $button = $('<button>' + $placeholder.text() + '</button>');
+            var $button = $('<button>' + $placeholder.html() + '</button>');
 
             $.each(this.getAttributes($placeholder), function(key, value) {
                 $button.attr(key, value);
