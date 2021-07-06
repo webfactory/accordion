@@ -230,6 +230,10 @@
                 $button.attr(key, value);
             });
 
+            // Ensure that the button is of type "button" to mitigate form submits in case the accordion is nested
+            // inside a form
+            $button.attr('type', 'button');
+
             $placeholder.html($button);
 
             this.removeAllAttributes($placeholder);
