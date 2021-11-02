@@ -90,7 +90,7 @@
             accordionHeader: '.js-accordion__header',
             accordionTrigger: '.js-accordion__trigger',
             accordionPanel: '.js-accordion__panel',
-            disableHashUpate: false
+            disableHashUpdate: false
         },
 
         init: function() {
@@ -160,7 +160,7 @@
                     }
 
                     // Update URL with hash when an accordion expands
-                    if ($target.attr('aria-expanded') === 'true' && id !== getUrlHash() && !self.settings.disableHashUpate) {
+                    if ($target.attr('aria-expanded') === 'true' && id !== getUrlHash() && !self.settings.disableHashUpdate) {
                         setUrlHash(id);
                     } else if ($target.attr('aria-expanded') === 'false') {
                         removeUrlHash();
