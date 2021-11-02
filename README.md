@@ -29,6 +29,7 @@ accordionHeader | string | '.js-accordion__header' | Class hook for the accordio
 accordionTrigger | string | '.js-accordion__trigger' | Class hook for the accordion title (a child of the header container). This element is transformed to a `<button>` by the plugin for accessibility reasons.
 accordionPanel | string | '.js-accordion__panel' | Class hook for the accordion panel. This element is typically hidden by the plugin until the accordion is opened by the user.
 accordionIsOpenClass | string | 'js-accordion--is-expanded' | A class to define whether an accordion should be expanded on startup. Note that this string has no preceding `.`.
+disableHashUpdate | boolean | false | Disables the automated hash update when triggering an accordion.
 
 ### Notes:
 - The accordion trigger can be any element (e.g. `<h2>`); you only need to be aware that a `<button>` will be inserted into this element 
