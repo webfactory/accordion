@@ -172,7 +172,7 @@ class wfaccordionGroup {
     }
 }
 
-const wfaccordionsInit = (options, initCallback) => {
+export const wfaccordionsInit = (options, initCallback) => {
     const wfaccordionGroups = Array.from(document.querySelectorAll('.js-accordion-group'));
 
     window.addEventListener('wf.accordions.mounted', (event) => {
