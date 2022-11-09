@@ -81,7 +81,7 @@ class wfaccordion {
             }
             removeAllAttributes(this.placeholder);
 
-            this.root.prepend(this.trigger);
+            this.header.prepend(this.trigger);
             this.trigger.prepend(this.placeholder);
         }
 
