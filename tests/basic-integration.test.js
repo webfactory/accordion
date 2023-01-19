@@ -1,4 +1,5 @@
 import { simulateClick } from './helpers/interactions';
+import { isExpanded, isCollapsed } from './helpers/state';
 import { createBasicAccordionGroup } from "./mocks/accordion.html";
 import { wfaccordionsInit } from '../wf.accordion';
 
@@ -28,13 +29,12 @@ describe('Simple accordion e2e tests', () => {
 
         wfaccordionsInit();
 
-        const panel = document.querySelector('.js-accordion__panel');
-        const trigger = document.querySelector('.js-accordion__trigger');
+        const accordion = document.querySelector('.js-accordion');
+        const trigger = accordion.querySelector('.js-accordion__trigger');
 
         simulateClick(trigger);
 
-        expect(trigger.getAttribute('aria-expanded')).toBe('true');
-        expect(panel.getAttribute('aria-hidden')).toBe('false');
+        expect(isExpanded(accordion)).toBeTruthy();
     });
 
     test('Closing an open accordion correctly updates ARIA attributes', () => {
@@ -42,8 +42,8 @@ describe('Simple accordion e2e tests', () => {
 
         wfaccordionsInit();
 
-        const trigger = document.querySelector('.js-accordion__trigger');
-        const panel = document.querySelector('.js-accordion__panel');
+        const accordion = document.querySelector('.js-accordion');
+        const trigger = accordion.querySelector('.js-accordion__trigger');
 
         // open
         simulateClick(trigger);
@@ -51,7 +51,6 @@ describe('Simple accordion e2e tests', () => {
         // close
         simulateClick(trigger);
 
-        expect(trigger.getAttribute('aria-expanded')).toBe('false');
-        expect(panel.getAttribute('aria-hidden')).toBe('true');
+        expect(isCollapsed(accordion)).toBeTruthy();
     });
 });
