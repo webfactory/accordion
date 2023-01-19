@@ -12,14 +12,16 @@ export function createBasicAccordion() {
 /**
  * Creates an accordion in JSDOM for testing.
  *
+ * @param {string} id – e.g. "my-accordion"
  * @param {string} dataAttr – e.g. "data-wf-accordion-disabled"
  */
-export function createBasicAccordionGroup(dataAttr) {
-    dataAttr = dataAttr ?? '';
+export function createBasicAccordionGroup(id, dataAttr) {
+    let htmlId = id ? `id="${id}"` : '';
+    let htmlDataAttr = dataAttr ?? '';
 
     document.body.innerHTML = `
         <div class="js-accordion-group">
-            <div class="js-accordion js-accordion--cke" ${dataAttr}>
+            <div ${htmlId} class="js-accordion js-accordion--cke" ${htmlDataAttr}>
                 <div class="js-accordion__header">
                     <div class="js-accordion__trigger">Titel</div>
                 </div>
