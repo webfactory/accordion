@@ -53,4 +53,14 @@ describe('Simple accordion e2e tests', () => {
 
         expect(isCollapsed(accordion)).toBeTruthy();
     });
+
+    test('Accordion can be configured to be expanded on page load', () => {
+        createBasicAccordionGroup('data-wf-accordion-expanded');
+
+        wfaccordionsInit();
+
+        const accordion = document.querySelector('.js-accordion');
+
+        expect(isExpanded(accordion)).toBeTruthy();
+    });
 });

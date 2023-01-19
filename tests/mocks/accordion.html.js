@@ -9,10 +9,17 @@ export function createBasicAccordion() {
       `;
 }
 
-export function createBasicAccordionGroup() {
+/**
+ * Creates an accordion in JSDOM for testing.
+ *
+ * @param {string} dataAttr – e.g. "data-wf-accordion-disabled"
+ */
+export function createBasicAccordionGroup(dataAttr) {
+    dataAttr = dataAttr ?? '';
+
     document.body.innerHTML = `
         <div class="js-accordion-group">
-            <div class="js-accordion js-accordion--cke">
+            <div class="js-accordion js-accordion--cke" ${dataAttr}>
                 <div class="js-accordion__header">
                     <div class="js-accordion__trigger">Titel</div>
                 </div>
