@@ -80,16 +80,6 @@ export function getAttributes(element) {
 }
 
 /**
- * Strip all HTML attributes (and their values) from a given element
- * @param element
- */
-export function removeAllAttributes(element) {
-    while(element.attributes.length > 0) {
-        element.removeAttribute(element.attributes[0].name);
-    }
-}
-
-/**
  * Enhance a given placeholder element with a <button> for better keyboard support
  *
  * @param {Element} element – The accordion to be enhanced
@@ -111,5 +101,3 @@ export function enhanceWithButton(element) {
     placeholder.remove();
     header.prepend(trigger);
 }
-
-export default {getUrlHash, setUrlHash, removeUrlHash, slugify, triggerIdMatchesUrlHash, getAttributes, removeAllAttributes, enhanceWithButton};

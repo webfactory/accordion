@@ -1,4 +1,4 @@
-import {slugify, setUrlHash, triggerIdMatchesUrlHash, getAttributes, removeAllAttributes, removeUrlHash, getUrlHash, enhanceWithButton} from "./helper";
+import {slugify, setUrlHash, triggerIdMatchesUrlHash, removeUrlHash, getUrlHash, enhanceWithButton} from "./helper";
 
 /**
  * Create a counter (used a for creation of unique IDs)
