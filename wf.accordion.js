@@ -31,12 +31,12 @@ class wfaccordion {
 
         if (!window.wfaccordion.slugs.includes(this.slug)) {
             window.wfaccordion.slugs.push(this.slug);
-            this.triggerID = this.slug;
-            this.panelID = this.slug + '-panel';
+            this.triggerId = this.slug;
+            this.panelId = this.slug + '-panel';
         } else {
             window.wfaccordion.slugs.push(this.slug + '-' + this.slugOccurence);
-            this.triggerID = this.slug + '-' + this.slugOccurence;
-            this.panelID = this.slug + '-panel' + '-' + this.slugOccurence;
+            this.triggerId = this.slug + '-' + this.slugOccurence;
+            this.panelId = this.slug + '-panel' + '-' + this.slugOccurence;
         }
 
         enhanceWithButton(this.root);
@@ -49,18 +49,18 @@ class wfaccordion {
 
         // Get initial state
         this.isDisabled = this.root.hasAttribute('data-wf-accordion-disabled');
-        this.isTargetOfUrlHash = this.triggerID === getUrlHash();
+        this.isTargetOfUrlHash = this.triggerId === getUrlHash();
         this.isExpandedOnStartup = this.root.hasAttribute('data-wf-accordion-expanded') || this.isTargetOfUrlHash;
 
         // Create ARIA relationships between headers and panels and set initial state
-        this.trigger.setAttribute('id', this.triggerID);
-        this.trigger.setAttribute('aria-controls', this.panelID);
+        this.trigger.setAttribute('id', this.triggerId);
+        this.trigger.setAttribute('aria-controls', this.panelId);
         this.trigger.setAttribute('aria-disabled', this.isDisabled);
         this.trigger.setAttribute('aria-expanded', this.isExpandedOnStartup);
 
         if (this.panel) {
-            this.panel.setAttribute('id', this.panelID);
-            this.panel.setAttribute('aria-labelledby', this.triggerID);
+            this.panel.setAttribute('id', this.panelId);
+            this.panel.setAttribute('aria-labelledby', this.triggerId);
             this.panel.setAttribute('aria-hidden', !this.isExpandedOnStartup);
         }
 
@@ -84,9 +84,9 @@ class wfaccordion {
 
             // Update URL with hash when an accordion expands
             if (!this.settings.disableHashUpdate) {
-                if (target.getAttribute('aria-expanded') === 'true' && this.triggerID !== getUrlHash()) {
-                    setUrlHash(this.triggerID);
-                } else if (target.getAttribute('aria-expanded') === 'false' && this.triggerID === getUrlHash()) {
+                if (target.getAttribute('aria-expanded') === 'true' && this.triggerId !== getUrlHash()) {
+                    setUrlHash(this.triggerId);
+                } else if (target.getAttribute('aria-expanded') === 'false' && this.triggerId === getUrlHash()) {
                     removeUrlHash();
                 }
             }
