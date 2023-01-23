@@ -58,17 +58,6 @@ export function slugify(string) {
 }
 
 /**
- * Check if Accordion is targeted by URL hash
- *
- * @param triggerElement
- * @returns {boolean}
- */
-export function triggerIdMatchesUrlHash(triggerElement) {
-    return triggerElement.getAttribute('id') === getUrlHash();
-}
-
-
-/**
  * Return all HTML attributes (and their values) of a given element
  * @param element
  * @returns {{}}
