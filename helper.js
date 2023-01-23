@@ -69,6 +69,21 @@ export function getAttributes(element) {
 }
 
 /**
+ * Determine whether a given placeholder contains a heading as its only child
+ *
+ * @param {Element} placeholder
+ * @returns {Element|Boolean} – The found heading element or false
+ */
+function _placeholderConsistsOfHeading(placeholder) {
+    const hasHeading = Array.from(placeholder.children).filter((child) => {
+        return child.nodeName.toLowerCase().match(/h[2-6]/);
+    }).length > 0;
+    const hasSingleChild = placeholder.childNodes.length === 1;
+
+    return hasSingleChild && hasHeading ? placeholder.querySelector(':scope > h2, :scope > h3, :scope > h4, :scope > h5, :scope > h6') : false;
+}
+
+/**
  * Enhance a given placeholder element with a <button> for better keyboard support
  *
  * @param {Element} element – The accordion to be enhanced
@@ -77,16 +92,38 @@ export function enhanceWithButton(element) {
     const header = element.querySelector('.js-accordion__header');
     const placeholder = element.querySelector('.js-accordion__trigger');
     const placeholderAttributes = getAttributes(placeholder);
+    const placeholderHeading = _placeholderConsistsOfHeading(placeholder);
 
+    // create button
     let trigger = document.createElement('button');
 
+    // shift placeholder attributes to button
     for (const entry in placeholderAttributes) {
         trigger.setAttribute(entry, placeholderAttributes[entry]);
     }
 
+    // ensure button is of type button to mitigate form submits if the accordion is nested in a form
     trigger.setAttribute('type', 'button');
-    trigger.innerHTML = DOMPurify.sanitize(placeholder.innerHTML);
+
+    // if the placeholder consists of a heading (we allow h2-h6), we need to perform some DOM switcheroo
+    // so the resulting HTML is valid (heading contains button contains childNodes formerly nested in heading)
+    if (placeholderHeading) {
+        // insert heading content into button
+        trigger.innerHTML = DOMPurify.sanitize(placeholderHeading.innerHTML);
+
+        // insert button into heading
+        placeholderHeading.replaceChildren();
+        placeholderHeading.append(trigger);
+
+        // insert heading and button into header
+        header.prepend(placeholderHeading);
+    } else {
+        // insert placeholder content into button
+        trigger.innerHTML = DOMPurify.sanitize(placeholder.innerHTML);
+
+        // insert button into header
+        header.prepend(trigger);
+    }
 
     placeholder.remove();
-    header.prepend(trigger);
 }
