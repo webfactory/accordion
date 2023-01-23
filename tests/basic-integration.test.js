@@ -103,4 +103,14 @@ describe('Simple accordion e2e tests', () => {
 
         expect(isExpanded(accordion)).toBeTruthy();
     });
+
+    test('Accordion can be disabled and have no panel', () => {
+        createBasicAccordionGroup(undefined, 'data-wf-accordion-disabled', false);
+
+        wfaccordionsInit();
+
+        const trigger = document.querySelector('.js-accordion__trigger');
+
+        expect(trigger.getAttribute('aria-disabled') === 'true').toBeTruthy();
+    });
 });

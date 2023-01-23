@@ -14,10 +14,12 @@ export function createBasicAccordion() {
  *
  * @param {string} id – e.g. "my-accordion"
  * @param {string} dataAttr – e.g. "data-wf-accordion-disabled"
+ * @param {boolean} hasPanel – optional param to simulate an accordion without panel
  */
-export function createBasicAccordionGroup(id, dataAttr) {
+export function createBasicAccordionGroup(id, dataAttr, hasPanel = true) {
     let htmlId = id ? `id="${id}"` : '';
     let htmlDataAttr = dataAttr ?? '';
+    let panel = hasPanel ? `<div class="js-accordion__panel">Text</div>` : '';
 
     document.body.innerHTML = `
         <div class="js-accordion-group">
@@ -25,7 +27,7 @@ export function createBasicAccordionGroup(id, dataAttr) {
                 <div class="js-accordion__header">
                     <div class="js-accordion__trigger">Titel</div>
                 </div>
-                <div class="js-accordion__panel">Text</div>
+                ${panel}
             </div>
         </div>
       `;
