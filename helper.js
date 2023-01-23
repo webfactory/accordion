@@ -1,3 +1,5 @@
+import * as DOMPurify from 'dompurify';
+
 /**
  * Returns the loaction hash minus the hash-symbol
  * @returns {string}
@@ -78,13 +80,24 @@ export function getAttributes(element) {
 }
 
 /**
- * Strip all HTML attributes (and their values) from a given element
- * @param element
+ * Enhance a given placeholder element with a <button> for better keyboard support
+ *
+ * @param {Element} element – The accordion to be enhanced
  */
-export function removeAllAttributes(element) {
-    while(element.attributes.length > 0) {
-        element.removeAttribute(element.attributes[0].name);
-    }
-}
+export function enhanceWithButton(element) {
+    const header = element.querySelector('.js-accordion__header');
+    const placeholder = element.querySelector('.js-accordion__trigger');
+    const placeholderAttributes = getAttributes(placeholder);
 
-export default {getUrlHash, setUrlHash, removeUrlHash, slugify, triggerIdMatchesUrlHash, getAttributes, removeAllAttributes};
+    let trigger = document.createElement('button');
+
+    for (const entry in placeholderAttributes) {
+        trigger.setAttribute(entry, placeholderAttributes[entry]);
+    }
+
+    trigger.setAttribute('type', 'button');
+    trigger.innerHTML = DOMPurify.sanitize(placeholder.innerHTML);
+
+    placeholder.remove();
+    header.prepend(trigger);
+}

@@ -1,4 +1,4 @@
-import {slugify, setUrlHash, triggerIdMatchesUrlHash, getAttributes, removeAllAttributes, removeUrlHash, getUrlHash} from "./helper";
+import {slugify, setUrlHash, triggerIdMatchesUrlHash, removeUrlHash, getUrlHash, enhanceWithButton} from "./helper";
 
 /**
  * Create a counter (used a for creation of unique IDs)
@@ -15,13 +15,13 @@ class wfaccordion {
             ...{
                 accordionHeader: '.js-accordion__header',
                 accordionTrigger: '.js-accordion__trigger',
+                enhancedAccordionTrigger: 'button.js-accordion__trigger',
                 accordionPanel: '.js-accordion__panel',
                 disableHashUpdate: false
             },
             ...options
         }
         this.root = elem;
-        this.header = this.root.querySelector(this.settings.accordionHeader);
         this.panel = this.root.querySelector(this.settings.accordionPanel);
         this.placeholder = this.root.querySelector(this.settings.accordionTrigger);
         this.slug = this.root.getAttribute('id') || slugify(this.placeholder.textContent);
@@ -39,7 +39,9 @@ class wfaccordion {
             this.panelID = this.slug + '-panel' + '-' + this.slugOccurence;
         }
 
-        this.enhanceWithButton();
+        enhanceWithButton(this.root);
+        this.trigger = this.root.querySelector(this.settings.enhancedAccordionTrigger);
+
         this.events();
 
         // Prevent duplicated IDs on root and header element
@@ -66,26 +68,6 @@ class wfaccordion {
             this.trigger.focus()
         }
 
-    }
-
-    enhanceWithButton() {
-        // Support the case that the placeholder may already be a button
-        if (this.placeholder.nodeName && this.placeholder.nodeName.toLowerCase() === 'button') {
-            this.trigger = this.placeholder;
-        } else {
-            this.trigger = document.createElement('button');
-            const placeholderAttributes = getAttributes(this.placeholder);
-
-            for (const entry in placeholderAttributes) {
-                this.trigger.setAttribute(entry, placeholderAttributes[entry]);
-            }
-            removeAllAttributes(this.placeholder);
-
-            this.header.prepend(this.trigger);
-            this.trigger.prepend(this.placeholder);
-        }
-
-        this.trigger.setAttribute('type', 'button');
     }
 
     events() {
