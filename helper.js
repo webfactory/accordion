@@ -149,7 +149,7 @@ function _insertButtonIntoHeading(heading, button, options) {
     // insert placeholder content into button
     button.innerHTML = DOMPurify.sanitize(heading.innerHTML);
 
-    // insert button into cleaned placeholder/heading
+    // insert button into cleaned heading
     if (options.removeHeadingAttributes) {
         _removeAllAttributes(heading);
     }
