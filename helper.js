@@ -59,28 +59,128 @@ export function slugify(string) {
 
 /**
  * Return all HTML attributes (and their values) of a given element
- * @param element
+ * @param {Element} element
  * @returns {{}}
+ * @private
  */
-export function getAttributes(element) {
+function _getAttributes(element) {
     return element.getAttributeNames().reduce((acc, name) => {
         return {...acc, [name]: element.getAttribute(name)};
     }, {});
 }
 
 /**
+ * Strip all HTML attributes (and their values) from a given element
+ * @param {Element} element
+ * @private
+ */
+function _removeAllAttributes(element) {
+    while(element.attributes.length > 0) {
+        element.removeAttribute(element.attributes[0].name);
+    }
+}
+
+/**
  * Determine whether a given placeholder contains a heading as its only child
  *
  * @param {Element} placeholder
- * @returns {Element|Boolean} – The found heading element or false
+ * @returns {Boolean}
  */
-function _placeholderConsistsOfHeading(placeholder) {
-    const hasHeading = Array.from(placeholder.children).filter((child) => {
+function _hasNestedHeading(placeholder) {
+    const hasSingleDirectDescendant = placeholder.childNodes.length === 1;
+    const containsAtLeastOneHeading = Array.from(placeholder.children).filter((child) => {
         return child.nodeName.toLowerCase().match(/h[2-6]/);
     }).length > 0;
-    const hasSingleChild = placeholder.childNodes.length === 1;
 
-    return hasSingleChild && hasHeading ? placeholder.querySelector(':scope > h2, :scope > h3, :scope > h4, :scope > h5, :scope > h6') : false;
+    return hasSingleDirectDescendant && containsAtLeastOneHeading;
+}
+
+/**
+ * Replace the placeholder element with a button that inherits all attributes
+ *
+ * @param {Element} placeholder
+ * @returns {HTMLButtonElement}
+ * @private
+ */
+function _replacePlaceholderWithButton(placeholder) {
+    let trigger = _createButtonElementAndInheritAttributes(placeholder);
+
+    // insert placeholder content into button
+    trigger.innerHTML = DOMPurify.sanitize(placeholder.innerHTML);
+
+    placeholder.remove();
+
+    return trigger;
+}
+
+/**
+ * Extract a nested heading from the placeholder, wrap a button around its children and replace the heading's
+ * inner HTML with the button (the button inherits the headings attributes). Then remove the placeholder.
+ *
+ * @param {Element} placeholder
+ * @returns {HTMLHeadingElement}
+ * @private
+ */
+function _replacePlaceholderWithHeadingWrappedAroundButton(placeholder) {
+    const heading = placeholder.querySelector(':scope > h2, :scope > h3, :scope > h4, :scope > h5, :scope > h6');
+    const button = _createButtonElementAndInheritAttributes(placeholder)
+
+    _insertButtonIntoHeading(heading, button);
+
+    placeholder.remove();
+
+    return heading;
+}
+
+/**
+ * Take a heading, wrap a button around its children and replace the heading's inner HTML with the button.
+ * The button inherits the headings attributes.
+ *
+ * @param {HTMLHeadingElement} heading
+ * @param {HTMLButtonElement} button
+ * @param {Object} [options]
+ * @returns {HTMLHeadingElement}
+ * @private
+ */
+function _insertButtonIntoHeading(heading, button, options) {
+    // defaults
+    options = options || { removeHeadingAttributes: false };
+
+    // insert placeholder content into button
+    button.innerHTML = DOMPurify.sanitize(heading.innerHTML);
+
+    // insert button into cleaned placeholder/heading
+    if (options.removeHeadingAttributes) {
+        _removeAllAttributes(heading);
+    }
+    heading.replaceChildren();
+    heading.append(button);
+
+    return heading;
+}
+
+/**
+ * Create a button element and copy attributes from placeholder over to button
+ *
+ * @param {Element} placeholder
+ * @returns {HTMLButtonElement}
+ * @private
+ */
+function _createButtonElementAndInheritAttributes(placeholder) {
+    const placeholderAttributes = _getAttributes(placeholder);
+
+    // create button
+    let button = document.createElement('button');
+
+    // shift placeholder attributes to button
+    for (const entry in placeholderAttributes) {
+        button.setAttribute(entry, placeholderAttributes[entry]);
+    }
+
+    // ensure button is of type button to mitigate form submits if the accordion is nested in a form
+    button.setAttribute('type', 'button');
+
+    return button;
 }
 
 /**
@@ -91,39 +191,18 @@ function _placeholderConsistsOfHeading(placeholder) {
 export function enhanceWithButton(element) {
     const header = element.querySelector('.js-accordion__header');
     const placeholder = element.querySelector('.js-accordion__trigger');
-    const placeholderAttributes = getAttributes(placeholder);
-    const placeholderHeading = _placeholderConsistsOfHeading(placeholder);
+    const placeholderIsHeading = placeholder.nodeName.toLowerCase().match(/h[2-6]/);
+    const placeholderContainsHeadingAsOnlyDirectDescendant = _hasNestedHeading(placeholder);
+    let triggerElem;
 
-    // create button
-    let trigger = document.createElement('button');
-
-    // shift placeholder attributes to button
-    for (const entry in placeholderAttributes) {
-        trigger.setAttribute(entry, placeholderAttributes[entry]);
-    }
-
-    // ensure button is of type button to mitigate form submits if the accordion is nested in a form
-    trigger.setAttribute('type', 'button');
-
-    // if the placeholder consists of a heading (we allow h2-h6), we need to perform some DOM switcheroo
-    // so the resulting HTML is valid (heading contains button contains childNodes formerly nested in heading)
-    if (placeholderHeading) {
-        // insert heading content into button
-        trigger.innerHTML = DOMPurify.sanitize(placeholderHeading.innerHTML);
-
-        // insert button into heading
-        placeholderHeading.replaceChildren();
-        placeholderHeading.append(trigger);
-
-        // insert heading and button into header
-        header.prepend(placeholderHeading);
+    if (placeholderIsHeading) {
+        const button = _createButtonElementAndInheritAttributes(placeholder);
+        triggerElem = _insertButtonIntoHeading(placeholder, button, { removeHeadingAttributes: true });
+    } else if (placeholderContainsHeadingAsOnlyDirectDescendant) {
+        triggerElem = _replacePlaceholderWithHeadingWrappedAroundButton(placeholder);
     } else {
-        // insert placeholder content into button
-        trigger.innerHTML = DOMPurify.sanitize(placeholder.innerHTML);
-
-        // insert button into header
-        header.prepend(trigger);
+        triggerElem = _replacePlaceholderWithButton(placeholder);
     }
 
-    placeholder.remove();
+    header.prepend(triggerElem);
 }
