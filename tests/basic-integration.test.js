@@ -24,8 +24,20 @@ describe('Simple accordion e2e tests', () => {
         expect(panel.getAttribute('id')).toBe('titel-panel');
     });
 
+    test('Accordion ID consists of only human-readable text content (nested HTML is ignored)', () => {
+        createBasicAccordionGroup({placeholderContent: `<h2>some <span class="blue">nested</span> HTML</h2>`});
+
+        wfaccordionsInit();
+
+        const trigger = document.querySelector('.js-accordion__trigger');
+
+        simulateClick(trigger);
+
+        expect(trigger.getAttribute('id')).toBe('some-nested-html');
+    });
+
     test('Accordion with pre-configured ID', () => {
-        createBasicAccordionGroup('custom-id', undefined);
+        createBasicAccordionGroup({id: 'custom-id'});
 
         wfaccordionsInit();
 
@@ -70,7 +82,7 @@ describe('Simple accordion e2e tests', () => {
     });
 
     test('Accordion can be configured to be expanded on page load', () => {
-        createBasicAccordionGroup(undefined, 'data-wf-accordion-expanded');
+        createBasicAccordionGroup({dataAttr: 'data-wf-accordion-expanded'});
 
         wfaccordionsInit();
 
@@ -80,7 +92,7 @@ describe('Simple accordion e2e tests', () => {
     });
 
     test('Accordion can be configured to be disabled on page load', () => {
-        createBasicAccordionGroup(undefined, 'data-wf-accordion-disabled');
+        createBasicAccordionGroup({dataAttr: 'data-wf-accordion-disabled'});
 
         wfaccordionsInit();
 
@@ -90,12 +102,12 @@ describe('Simple accordion e2e tests', () => {
     });
 
     test('Accordion can be expanded on page load via deep link (hash)', () => {
-        const id = 'my-deeplinked-accordion';
+        const customId = 'my-deeplinked-accordion';
 
-        createBasicAccordionGroup(id, undefined);
+        createBasicAccordionGroup({id: customId});
 
         delete window.location;
-        window.location = new URL(`https://www.example.com#${id}`);
+        window.location = new URL(`https://www.example.com#${customId}`);
 
         wfaccordionsInit();
 
@@ -105,7 +117,7 @@ describe('Simple accordion e2e tests', () => {
     });
 
     test('Accordion can be disabled and have no panel', () => {
-        createBasicAccordionGroup(undefined, 'data-wf-accordion-disabled', false);
+        createBasicAccordionGroup({dataAttr: 'data-wf-accordion-disabled', hasPanel: false});
 
         wfaccordionsInit();
 

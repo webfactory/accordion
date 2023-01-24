@@ -12,20 +12,33 @@ export function createBasicAccordion() {
 /**
  * Creates an accordion in JSDOM for testing.
  *
- * @param {string} id – e.g. "my-accordion"
- * @param {string} dataAttr – e.g. "data-wf-accordion-disabled"
- * @param {boolean} hasPanel – optional param to simulate an accordion without panel
+ * @param {{}} [options]
+ * @param {string} options.id – e.g. "my-accordion"
+ * @param {string} options.dataAttr – e.g. "data-wf-accordion-disabled"
+ * @param {string} options.placeholderContent – e.g. `I am <strong>`
+ * @param {boolean} options.hasPanel – optional param to simulate an accordion without panel
  */
-export function createBasicAccordionGroup(id, dataAttr, hasPanel = true) {
-    let htmlId = id ? `id="${id}"` : '';
-    let htmlDataAttr = dataAttr ?? '';
-    let panel = hasPanel ? `<div class="js-accordion__panel">Text</div>` : '';
+export function createBasicAccordionGroup(options) {
+    // set defaults
+    options = {
+        ...{
+            id: undefined,
+            dataAttr: undefined,
+            placeholderContent: undefined,
+            hasPanel: true
+        },
+        ...options
+    }
+    let htmlId = options.id ? `id="${options.id}"` : '';
+    let htmlDataAttr = options.dataAttr ?? '';
+    let placeholderInnerHtml = options.placeholderContent ? options.placeholderContent : `Titel`;
+    let panel = options.hasPanel ? `<div class="js-accordion__panel">Text</div>` : '';
 
     document.body.innerHTML = `
         <div class="js-accordion-group">
             <div ${htmlId} class="js-accordion js-accordion--cke" ${htmlDataAttr}>
                 <div class="js-accordion__header">
-                    <div class="js-accordion__trigger">Titel</div>
+                    <div class="js-accordion__trigger">${placeholderInnerHtml}</div>
                 </div>
                 ${panel}
             </div>
