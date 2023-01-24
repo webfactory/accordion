@@ -55,22 +55,34 @@ export function createAccordionWithNestedHeading() {
       `;
 }
 
-export function createAccordionWithHeadingAsPlaceholder() {
+export function createAccordionWithNestedHeadingAndFormattedChildren() {
     document.body.innerHTML = `
         <div class="js-accordion js-accordion--cke">
             <div class="js-accordion__header">
-                <h2 class="js-accordion__trigger">Titel</h2>
+                <div class="js-accordion__trigger"><h2>Titel <strong>bold</strong></h2></div>
             </div>
             <div class="js-accordion__panel">Text</div>
         </div>
       `;
 }
 
-export function createAccordionWithNestedHeadingAndFormattedChildren() {
+export function createAccordionWithNestedAndWhitespace() {
     document.body.innerHTML = `
         <div class="js-accordion js-accordion--cke">
             <div class="js-accordion__header">
-                <div class="js-accordion__trigger"><h2>Titel <strong>bold</strong></h2></div>
+                <div class="js-accordion__trigger"> <h2>Titel</h2>
+                </div>
+            </div>
+            <div class="js-accordion__panel">Text</div>
+        </div>
+      `;
+}
+
+export function createAccordionWithHeadingAsPlaceholder() {
+    document.body.innerHTML = `
+        <div class="js-accordion js-accordion--cke">
+            <div class="js-accordion__header">
+                <h2 class="js-accordion__trigger">Titel</h2>
             </div>
             <div class="js-accordion__panel">Text</div>
         </div>

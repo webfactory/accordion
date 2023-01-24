@@ -87,10 +87,19 @@ function _removeAllAttributes(element) {
  * @returns {Boolean}
  */
 function _hasNestedHeading(placeholder) {
-    const hasSingleDirectDescendant = placeholder.childNodes.length === 1;
-    const containsAtLeastOneHeading = Array.from(placeholder.children).filter((child) => {
+    // use a cloned test subject so we can perform destructive manipulations (trim whitespace)
+    // without side effects
+    let testSubject = placeholder.cloneNode(true);
+
+    // avoid false negatives (blank spaces and new lines count as text nodes => childNodes)
+    testSubject.innerHTML = testSubject.innerHTML.replace(/\s+/g, '');
+
+    const hasSingleDirectDescendant = testSubject.childNodes.length === 1;
+    const containsAtLeastOneHeading = Array.from(testSubject.children).filter((child) => {
         return child.nodeName.toLowerCase().match(/h[2-6]/);
     }).length > 0;
+
+    testSubject.remove();
 
     return hasSingleDirectDescendant && containsAtLeastOneHeading;
 }
