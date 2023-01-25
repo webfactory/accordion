@@ -1,3 +1,4 @@
+import {defaultOptions} from './defaults';
 import {slugify, setUrlHash, removeUrlHash, getUrlHash, enhanceWithButton} from "./helper";
 
 /**
@@ -12,13 +13,7 @@ window.wfaccordion.slugs = window.wfaccordion.slugs || [];
 class wfaccordion {
     constructor(elem, options) {
         this.settings = {
-            ...{
-                accordionHeader: '.js-accordion__header',
-                accordionTrigger: '.js-accordion__trigger',
-                enhancedAccordionTrigger: 'button.js-accordion__trigger',
-                accordionPanel: '.js-accordion__panel',
-                disableHashUpdate: false
-            },
+            ...defaultOptions,
             ...options
         }
         this.root = elem;
@@ -39,8 +34,10 @@ class wfaccordion {
             this.panelId = this.slug + '-panel' + '-' + this.slugOccurence;
         }
 
-        enhanceWithButton(this.root);
-        this.trigger = this.root.querySelector(this.settings.enhancedAccordionTrigger);
+        enhanceWithButton(this.root, this.settings);
+
+        // get a fresh reference after enhancements
+        this.trigger = this.root.querySelector(this.settings.accordionTrigger);
 
         this.events();
 
@@ -106,7 +103,7 @@ class wfaccordionGroup {
             ...options
         };
         this.accordions = Array.from(this.group.querySelectorAll(this.settings.accordionRoot)).map((root) => {
-            return new wfaccordion(root);
+            return new wfaccordion(root, options);
         });
         this.accordionTrigger = this.accordions.map((accordion) => {
             return accordion.trigger

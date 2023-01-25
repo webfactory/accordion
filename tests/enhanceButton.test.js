@@ -4,6 +4,8 @@ import {
     createAccordionWithXSSContent,
 } from "./mocks/accordion.html";
 
+
+
 describe('Accordion is enhanced with button', () => {
     test('Basic accordion', () => {
         createAccordionGroup();
