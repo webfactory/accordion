@@ -1,3 +1,4 @@
+import {defaultOptions} from './defaults';
 import {slugify, setUrlHash, removeUrlHash, getUrlHash, enhanceWithButton} from "./helper";
 
 /**
@@ -12,13 +13,7 @@ window.wfaccordion.slugs = window.wfaccordion.slugs || [];
 class wfaccordion {
     constructor(elem, options) {
         this.settings = {
-            ...{
-                accordionHeader: '.js-accordion__header',
-                accordionTrigger: '.js-accordion__trigger',
-                enhancedAccordionTrigger: 'button.js-accordion__trigger',
-                accordionPanel: '.js-accordion__panel',
-                disableHashUpdate: false
-            },
+            ...defaultOptions,
             ...options
         }
         this.root = elem;
@@ -39,8 +34,10 @@ class wfaccordion {
             this.panelId = this.slug + '-panel' + '-' + this.slugOccurence;
         }
 
-        enhanceWithButton(this.root);
-        this.trigger = this.root.querySelector(this.settings.enhancedAccordionTrigger);
+        enhanceWithButton(this.root, this.settings);
+
+        // get a fresh reference after enhancements
+        this.trigger = this.root.querySelector(this.settings.accordionTrigger);
 
         this.events();
 
@@ -98,15 +95,11 @@ class wfaccordionGroup {
     constructor(elem, options) {
         this.group = elem;
         this.settings = {
-            ...{
-                accordionGroup: '.js-accordion-group',
-                accordionRoot: '.js-accordion',
-                disableHashUpdate: false
-            },
+            ...defaultOptions,
             ...options
         };
         this.accordions = Array.from(this.group.querySelectorAll(this.settings.accordionRoot)).map((root) => {
-            return new wfaccordion(root);
+            return new wfaccordion(root, options);
         });
         this.accordionTrigger = this.accordions.map((accordion) => {
             return accordion.trigger
@@ -155,7 +148,11 @@ class wfaccordionGroup {
 }
 
 export const wfaccordionsInit = (options, initCallback) => {
-    const wfaccordionGroups = Array.from(document.querySelectorAll('.js-accordion-group'));
+    const settings = {
+        ...defaultOptions,
+        ...options
+    }
+    const wfaccordionGroups = Array.from(document.querySelectorAll(settings.accordionGroup));
 
     window.addEventListener('wf.accordions.mounted', (event) => {
         if (initCallback) {
@@ -164,7 +161,7 @@ export const wfaccordionsInit = (options, initCallback) => {
     });
 
     wfaccordionGroups.forEach((group, index) => {
-        window.wfaccordion.groups.push(new wfaccordionGroup(group, options || {}));
+        window.wfaccordion.groups.push(new wfaccordionGroup(group, settings));
 
         // Throw event when the last accordion group was processed (and DOM manipulations are done)
         if (index === wfaccordionGroups.length - 1) {

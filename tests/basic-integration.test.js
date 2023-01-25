@@ -125,4 +125,32 @@ describe('Simple accordion e2e tests', () => {
 
         expect(trigger.getAttribute('aria-disabled') === 'true').toBeTruthy();
     });
+
+    test('Accordion can use custom class hooks', () => {
+        document.body.innerHTML = `
+            <div class="some-quirky-group-class">
+                <div class="a-friggin-gordon">
+                    <div class="header-in-the-clouds">
+                        <div class="my-fancy-js-hook">Title</div>
+                    </div>
+                    <div class="get-panelized">Text</div>
+                </div>
+            </div>
+          `;
+
+        wfaccordionsInit({
+            accordionGroup: '.some-quirky-group-class',
+            accordionRoot: '.a-friggin-gordon',
+            accordionHeader: '.header-in-the-clouds',
+            accordionTrigger: '.my-fancy-js-hook',
+            accordionPanel: '.get-panelized'
+        });
+
+        const accordion = document.querySelector('.a-friggin-gordon');
+        const trigger = accordion.querySelector('.my-fancy-js-hook');
+
+        simulateClick(trigger);
+
+        expect(isExpanded(accordion, {accordionTrigger: '.my-fancy-js-hook', accordionPanel: '.get-panelized'})).toBeTruthy();
+    });
 });

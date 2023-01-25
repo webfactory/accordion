@@ -1,3 +1,5 @@
+import { defaultOptions } from './defaults';
+
 /**
  * Returns the loaction hash minus the hash-symbol
  * @returns {string}
@@ -194,10 +196,16 @@ function _createButtonElementAndInheritAttributes(placeholder) {
  * Enhance a given placeholder element with a <button> for better keyboard support
  *
  * @param {Element} element – The accordion to be enhanced
+ * @param {Object} [options]
  */
-export function enhanceWithButton(element) {
-    const header = element.querySelector('.js-accordion__header');
-    const placeholder = element.querySelector('.js-accordion__trigger');
+export function enhanceWithButton(element, options) {
+    const settings = {
+        ...defaultOptions,
+        ...options
+    }
+
+    const header = element.querySelector(settings.accordionHeader);
+    const placeholder = element.querySelector(settings.accordionTrigger);
     const placeholderIsHeading = placeholder.nodeName.toLowerCase().match(/h[2-6]/);
     const placeholderContainsHeadingAsOnlyDirectDescendant = _hasNestedHeading(placeholder);
     let triggerElem;
