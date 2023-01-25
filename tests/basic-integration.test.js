@@ -1,7 +1,7 @@
 import { simulateClick } from './helpers/interactions';
 import { isExpanded, isCollapsed } from './helpers/state';
 import { createBasicAccordionGroup } from "./mocks/accordion.html";
-import { wfaccordionsInit } from '../wf.accordion';
+import { wfaccordionsInit } from '../src/accordion';
 
 describe('Simple accordion e2e tests', () => {
     test('Basic accordion setup with ARIA attributes', () => {
