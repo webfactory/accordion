@@ -1,90 +1,86 @@
 import { enhanceWithButton } from "../src/helper";
 import {
-    createBasicAccordion,
-    createAccordionWithButton,
-    createAccordionWithFormattedPlaceholder,
-    createAccordionWithNestedHeading,
-    createAccordionWithNestedHeadingAndFormattedChildren,
-    createAccordionWithHeadingAsPlaceholder,
-    createAccordionWithXSSContent, createAccordionWithNestedAndWhitespace,
+    createAccordionGroup,
+    createAccordionWithXSSContent,
 } from "./mocks/accordion.html";
 
 describe('Accordion is enhanced with button', () => {
     test('Basic accordion', () => {
-        createBasicAccordion();
+        createAccordionGroup();
 
         const header = document.querySelector('.js-accordion__header');
         const accordion = document.querySelector('.js-accordion');
 
         enhanceWithButton(accordion);
 
-        expect(header.innerHTML.trim()).toBe('<button class="js-accordion__trigger" type="button">Titel</button>');
+        expect(header.innerHTML.trim()).toBe('<button class="js-accordion__trigger" type="button">Title</button>');
     });
 
     test('Accordion with existing button', () => {
-        createAccordionWithButton();
+        createAccordionGroup({placeholder: `<button class="js-accordion__trigger">Title</button>`});
 
         const header = document.querySelector('.js-accordion__header');
         const accordion = document.querySelector('.js-accordion');
 
         enhanceWithButton(accordion);
 
-        expect(header.innerHTML.trim()).toBe('<button class="js-accordion__trigger" type="button">Titel</button>');
+        expect(header.innerHTML.trim()).toBe('<button class="js-accordion__trigger" type="button">Title</button>');
     });
 
     test('Accordion with formatted placeholder (strong, em)', () => {
-        createAccordionWithFormattedPlaceholder();
+        createAccordionGroup({placeholderContent: `Title <strong>bold</strong>`});
 
         const header = document.querySelector('.js-accordion__header');
         const accordion = document.querySelector('.js-accordion');
 
         enhanceWithButton(accordion);
 
-        expect(header.innerHTML.trim()).toBe('<button class="js-accordion__trigger" type="button">Titel <strong>bold</strong></button>');
+        expect(header.innerHTML.trim()).toBe('<button class="js-accordion__trigger" type="button">Title <strong>bold</strong></button>');
     });
 
     test('Accordion with heading nested in placeholder', () => {
-        createAccordionWithNestedHeading();
+        createAccordionGroup({placeholderContent: `<h2>Title</h2>`});
 
         const header = document.querySelector('.js-accordion__header');
         const accordion = document.querySelector('.js-accordion');
 
         enhanceWithButton(accordion);
 
-        expect(header.innerHTML.trim()).toBe('<h2><button class="js-accordion__trigger" type="button">Titel</button></h2>');
+        expect(header.innerHTML.trim()).toBe('<h2><button class="js-accordion__trigger" type="button">Title</button></h2>');
     });
 
     test('Accordion with nested heading that contains formatted child', () => {
-        createAccordionWithNestedHeadingAndFormattedChildren();
+        createAccordionGroup({placeholderContent: `<h2>Title <strong>bold</strong></h2>`});
 
         const header = document.querySelector('.js-accordion__header');
         const accordion = document.querySelector('.js-accordion');
 
         enhanceWithButton(accordion);
 
-        expect(header.innerHTML.trim()).toBe('<h2><button class="js-accordion__trigger" type="button">Titel <strong>bold</strong></button></h2>');
+        expect(header.innerHTML.trim()).toBe('<h2><button class="js-accordion__trigger" type="button">Title <strong>bold</strong></button></h2>');
     });
 
     test('Accordion with nested heading and whitespace', () => {
-        createAccordionWithNestedAndWhitespace();
+        createAccordionGroup({placeholder: `<div class="js-accordion__trigger"> <h2>Title</h2>
+                </div>`});
 
         const header = document.querySelector('.js-accordion__header');
         const accordion = document.querySelector('.js-accordion');
 
         enhanceWithButton(accordion);
 
-        expect(header.innerHTML.trim()).toBe('<h2><button class="js-accordion__trigger" type="button">Titel</button></h2>');
+        expect(header.innerHTML.trim()).toBe('<h2><button class="js-accordion__trigger" type="button">Title</button></h2>');
     });
 
     test('Accordion with heading as placeholder', () => {
-        createAccordionWithHeadingAsPlaceholder();
+        createAccordionGroup({placeholder: `<h2 class="js-accordion__trigger">Title</h2>`});
 
         const header = document.querySelector('.js-accordion__header');
         const accordion = document.querySelector('.js-accordion');
 
         enhanceWithButton(accordion);
 
-        expect(header.innerHTML.trim()).toBe('<h2><button class="js-accordion__trigger" type="button">Titel</button></h2>');
+        expect(header.innerHTML.trim()).toBe('<h2><button class="js-accordion__trigger" type="button">Title</button></h2>');
     });
 
     test('Accordion with XSS Content is sanitized', () => {
