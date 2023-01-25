@@ -1,4 +1,3 @@
-import * as DOMPurify from 'dompurify';
 import { defaultOptions } from './defaults';
 
 /**
@@ -116,7 +115,7 @@ function _replacePlaceholderWithButton(placeholder) {
     let trigger = _createButtonElementAndInheritAttributes(placeholder);
 
     // insert placeholder content into button
-    trigger.innerHTML = DOMPurify.sanitize(placeholder.innerHTML);
+    trigger.innerHTML = placeholder.innerHTML;
 
     placeholder.remove();
 
@@ -157,7 +156,7 @@ function _insertButtonIntoHeading(heading, button, options) {
     options = options || { removeHeadingAttributes: false };
 
     // insert placeholder content into button
-    button.innerHTML = DOMPurify.sanitize(heading.innerHTML);
+    button.innerHTML = heading.innerHTML;
 
     // insert button into cleaned heading
     if (options.removeHeadingAttributes) {
