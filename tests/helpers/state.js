@@ -2,6 +2,7 @@
  * Checks wether an accordion is expanded
  *
  * @param {Element} accordion  the accordion to be checked
+ * @return {Boolean}
  */
 export function isExpanded(accordion) {
     const trigger = accordion.querySelector('.js-accordion__trigger');
@@ -14,6 +15,7 @@ export function isExpanded(accordion) {
  * Checks wether an accordion is collapsed
  *
  * @param {Element} accordion  the accordion to be checked
+ * @return {Boolean}
  */
 export function isCollapsed(accordion) {
     const trigger = accordion.querySelector('.js-accordion__trigger');
