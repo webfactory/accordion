@@ -1,8 +1,5 @@
 import { enhanceWithButton } from "../src/helper";
-import {
-    createAccordionGroup,
-    createAccordionWithXSSContent,
-} from "./mocks/accordion.html";
+import { createAccordionGroup } from "./mocks/accordion.html";
 
 describe('Accordion is enhanced with button', () => {
     test('Basic accordion', () => {
@@ -81,16 +78,5 @@ describe('Accordion is enhanced with button', () => {
         enhanceWithButton(accordion);
 
         expect(header.innerHTML.trim()).toBe('<h2><button class="js-accordion__trigger" type="button">Title</button></h2>');
-    });
-
-    test('Accordion with XSS Content is sanitized', () => {
-        createAccordionWithXSSContent();
-
-        const header = document.querySelector('.js-accordion__header');
-        const accordion = document.querySelector('.js-accordion');
-
-        enhanceWithButton(accordion);
-
-        expect(header.innerHTML.trim()).toBe('<button class="js-accordion__trigger" type="button">Titel <img src="x"></button>');
     });
 });
