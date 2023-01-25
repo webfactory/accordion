@@ -1,4 +1,4 @@
-import { enhanceWithButton } from "../helper";
+import { enhanceWithButton } from "../src/helper";
 import {
     createBasicAccordion,
     createAccordionWithButton,
