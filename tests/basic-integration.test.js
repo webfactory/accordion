@@ -125,4 +125,17 @@ describe('Simple accordion e2e tests', () => {
 
         expect(trigger.getAttribute('aria-disabled') === 'true').toBeTruthy();
     });
+
+    test('Accordion can use custom class hooks', () => {
+        createAccordionGroup({placeholder: `<div class="my-fancy-js-hook">Title</div>`});
+
+        wfaccordionsInit({accordionTrigger: '.my-fancy-js-hook'});
+
+        const accordion = document.querySelector('.js-accordion');
+        const trigger = accordion.querySelector('.my-fancy-js-hook');
+
+        simulateClick(trigger);
+
+        expect(isExpanded(accordion, {accordionTrigger: '.my-fancy-js-hook'})).toBeTruthy();
+    });
 });
