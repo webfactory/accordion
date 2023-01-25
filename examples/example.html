@@ -164,6 +164,16 @@
                 <p>You can use nested elements inside the element with <code>.js-accordion__trigger</code>.</p>
             </div>
         </div>
+        <div class="wf-accordion js-accordion">
+            <div class="wf-accordion__header js-accordion__header">
+                <div class="wf-accordion__trigger js-accordion__trigger">
+                    <h3>This accordion's trigger element has a nested heading that will become the parent element of the button.</h3>
+                </div>
+            </div>
+            <div class="wf-accordion__panel js-accordion__panel">
+                <p>To result in valid HTML, the final DOM needs to avoid nesting block-level elements in buttons.</p>
+            </div>
+        </div>
     </div>
 
     <h2>Test with a second group</h2>

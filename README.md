@@ -9,7 +9,7 @@ Required HTML structure:
 <div class="wf-accordion-group js-accordion-group">
     <div class="wf-accordion js-accordion">
         <div class="wf-accordion__header js-accordion__header">
-            <div class="wf-accordion__trigger js-accordion-trigger">Titel</div>
+            <div class="wf-accordion__trigger js-accordion-trigger">Title</div>
         </div>
         <div class="wf-accordion__panel js-accordion__panel">Text</div>
     </div>
