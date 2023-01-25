@@ -1,5 +1,3 @@
-import * as DOMPurify from 'dompurify';
-
 /**
  * Returns the loaction hash minus the hash-symbol
  * @returns {string}
@@ -85,7 +83,7 @@ export function enhanceWithButton(element) {
     }
 
     trigger.setAttribute('type', 'button');
-    trigger.innerHTML = DOMPurify.sanitize(placeholder.innerHTML);
+    trigger.innerHTML = placeholder.innerHTML;
 
     placeholder.remove();
     header.prepend(trigger);

@@ -55,21 +55,9 @@ export function createAccordionWithButton() {
       `;
 }
 
-export function createAccordionWithXSSContent() {
-    document.body.innerHTML = `
-        <div class="js-accordion js-accordion--cke">
-            <div class="js-accordion__header">
-                <button class="js-accordion__trigger">Titel <img src=x onerror="alert(\'XSS Attack\')"></button>
-            </div>
-            <div class="js-accordion__panel">Text</div>
-        </div>
-      `;
-}
-
 export default {
     createBasicAccordion,
     createBasicAccordionGroup,
     createAccordionWithFormattedPlaceholder,
     createAccordionWithButton,
-    createAccordionWithXSSContent,
 };
