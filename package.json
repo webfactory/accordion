@@ -1,8 +1,8 @@
 {
   "name": "webfactory-accordion",
-  "version": "3.2.4",
-  "description": "A jQuery plugin for enhancement of predefined markup with accessible and keyboard-enabled accordion functionality.",
-  "main": "wf.accordion.js",
+  "version": "4.0.0",
+  "description": "A tiny script that progressively enhances static HTML with accessible and keyboard-enabled accordion functionality.",
+  "main": "src/main.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/webfactory/accordion.git"
@@ -11,5 +11,19 @@
   "bugs": {
     "url": "https://github.com/webfactory/accordion/issues"
   },
-  "homepage": "https://github.com/webfactory/accordion#readme"
+  "homepage": "https://github.com/webfactory/accordion#readme",
+  "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.20.11",
+    "jest": "^29.3.1",
+    "jest-environment-jsdom": "^29.3.1",
+    "webfactory-gulp-preset": "^2.9.2"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {},
+  "browserslist": [
+    "extends browserslist-config-webfactory/default",
+    "not dead"
+  ]
 }

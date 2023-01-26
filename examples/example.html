@@ -123,10 +123,11 @@
            display: none;
         }
     </style>
+    <script type="text/javascript" src="../dist/wf.accordion.min.js" defer></script>
 </head>
 <body>
     <h1>Demo page for wf-accordion</h1>
-    <p>wfAccordion is a jQuery plugin (requires v1.12.4 or later) for enhancement of predefined markup with accessible and keyboard-enabled accordion functionality. It closely follows the best practices laid out in <a href="https://www.w3.org/TR/wai-aria-practices-1.2/#accordion">WAI-ARIA Authoring Practices 1.2 for Accordions</a>.</p>
+    <p>wfAccordion is a tiny script for enhancement of predefined markup with accessible and keyboard-enabled accordion functionality. It closely follows the best practices laid out in <a href="https://www.w3.org/TR/wai-aria-practices-1.2/#accordion">WAI-ARIA Authoring Practices 1.2 for Accordions</a>.</p>
     <h2>Example Accordion Group</h2>
     <div class="wf-accordion-group js-accordion-group">
         <div class="wf-accordion js-accordion">
@@ -156,11 +157,21 @@
         <div class="wf-accordion js-accordion">
             <div class="wf-accordion__header js-accordion__header">
                 <h3 class="wf-accordion__trigger js-accordion__trigger">
-                    <span class="some-important-modifier-class">This accordion's trigger element has nested elements (e.g. a <code>span</code>)</codespan>
+                    <span class="some-important-modifier-class">This accordion's trigger element has <em>nested</em> <strong>elements</strong> (e.g. a <code>strong</code> or <code>span</code>)</span>
                 </h3>
             </div>
             <div class="wf-accordion__panel js-accordion__panel">
                 <p>You can use nested elements inside the element with <code>.js-accordion__trigger</code>.</p>
+            </div>
+        </div>
+        <div class="wf-accordion js-accordion">
+            <div class="wf-accordion__header js-accordion__header">
+                <div class="wf-accordion__trigger js-accordion__trigger">
+                    <h3>This accordion's trigger element has a nested heading that will become the parent element of the button.</h3>
+                </div>
+            </div>
+            <div class="wf-accordion__panel js-accordion__panel">
+                <p>To result in valid HTML, the final DOM needs to avoid nesting block-level elements in buttons.</p>
             </div>
         </div>
     </div>
@@ -200,11 +211,5 @@
             </div>
         </div>
     </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="wf.accordion.js"></script>
-    <script>
-        $('.js-accordion-group').wfAccordion();
-    </script>
 </body>
 </html>
