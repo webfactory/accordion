@@ -37,12 +37,12 @@ export function removeUrlHash() {
 }
 
 /**
- * Create a slug from any string.
- * https://gist.github.com/hagemann/382adfc57adbd5af078dc93feef01fe1
+ * Create a valid html id from any string.
+ * Inspired by https://gist.github.com/hagemann/382adfc57adbd5af078dc93feef01fe1
  *
  * @type {string}
  */
-export function slugify(string) {
+export function htmlid(string) {
     var a = 'àáäâãåăæąçćčđďèéěėëêęğǵḧìíïîįłḿǹńňñòóöôœøṕŕřßşśšșťțùúüûǘůűūųẃẍÿýźžż·/_,:;';
     var b = 'aaaaaaaaacccddeeeeeeegghiiiiilmnnnnooooooprrsssssttuuuuuuuuuwxyyzzz------';
     var p = new RegExp(a.split('').join('|'), 'g');
@@ -55,6 +55,7 @@ export function slugify(string) {
         .replace(/\-\-+/g, '-') // Replace multiple - with single -
         .replace(/^-+/, '') // Trim - from start of text
         .replace(/-+$/, '') // Trim - from end of text
+        .replace(/^[0-9]/, 'a$&') // Ensure that the returned string does not start with a number
 }
 
 /**

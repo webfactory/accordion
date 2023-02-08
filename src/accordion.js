@@ -1,5 +1,5 @@
 import {defaultOptions} from './defaults';
-import {slugify, setUrlHash, removeUrlHash, getUrlHash, enhanceWithButton} from "./helper";
+import {htmlid, setUrlHash, removeUrlHash, getUrlHash, enhanceWithButton} from "./helper";
 
 /**
  * Create a counter (used a for creation of unique IDs)
@@ -19,7 +19,7 @@ class wfaccordion {
         this.root = elem;
         this.panel = this.root.querySelector(this.settings.accordionPanel);
         this.placeholder = this.root.querySelector(this.settings.accordionTrigger);
-        this.slug = this.root.getAttribute('id') || slugify(this.placeholder.textContent);
+        this.slug = this.root.getAttribute('id') || htmlid(this.placeholder.textContent);
         this.slugOccurence = window.wfaccordion.slugs.filter((slug, index) => {
             return slug.indexOf(this.slug) >= 0
         }).length;
