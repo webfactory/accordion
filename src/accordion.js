@@ -47,7 +47,7 @@ class wfaccordion {
         // Get initial state
         this.isDisabled = this.root.hasAttribute('data-wf-accordion-disabled');
         this.isTargetOfUrlHash = this.triggerId === getUrlHash();
-        this.isExpandedOnStartup = this.root.hasAttribute('data-wf-accordion-expanded') || this.isTargetOfUrlHash;
+        this.isExpandedOnStartup = this.root.hasAttribute('data-wf-accordion-expanded');
 
         // Create ARIA relationships between headers and panels and set initial state
         this.trigger.setAttribute('id', this.triggerId);
@@ -62,30 +62,46 @@ class wfaccordion {
         }
 
         if (this.isTargetOfUrlHash) {
-            this.trigger.focus()
-        }
+            this.trigger.focus();
 
+            this.root.dispatchEvent(new CustomEvent('wf.accordion.expandedByHash', {
+                bubbles: true,
+                cancelable: true,
+            }));
+        }
+    }
+
+    toggle(event) {
+        const state = this.trigger.getAttribute('aria-expanded') === 'false';
+
+        if (!this.isDisabled) {
+            this.trigger.setAttribute('aria-expanded', state);
+            this.root.querySelector('#' + this.trigger.getAttribute('aria-controls')).setAttribute('aria-hidden', !state)
+        } else {
+            event.stopPropagation();
+        }
+    }
+
+    updateHash() {
+        // Update URL with hash when an accordion expands
+        if (this.trigger.getAttribute('aria-expanded') === 'true' && this.triggerId !== getUrlHash()) {
+            setUrlHash(this.triggerId);
+        } else if (this.trigger.getAttribute('aria-expanded') === 'false' && this.triggerId === getUrlHash()) {
+            removeUrlHash();
+        }
     }
 
     events() {
+        this.root.addEventListener('wf.accordion.expandedByHash', event => {
+            this.toggle(event);
+        });
 
         // Update ARIA states on click/tap
         this.trigger.addEventListener('click', (event) => {
-            const target = event.target.closest('button');
-            const state = target.getAttribute('aria-expanded') === 'false';
+            this.toggle();
 
-            if (!this.isDisabled) {
-                target.setAttribute('aria-expanded', state);
-                this.root.querySelector('#' + target.getAttribute('aria-controls')).setAttribute('aria-hidden', !state)
-            }
-
-            // Update URL with hash when an accordion expands
             if (!this.settings.disableHashUpdate) {
-                if (target.getAttribute('aria-expanded') === 'true' && this.triggerId !== getUrlHash()) {
-                    setUrlHash(this.triggerId);
-                } else if (target.getAttribute('aria-expanded') === 'false' && this.triggerId === getUrlHash()) {
-                    removeUrlHash();
-                }
+                this.updateHash();
             }
         });
     }
