@@ -71,14 +71,23 @@ class wfaccordion {
         }
     }
 
-    toggle(event) {
-        const state = this.trigger.getAttribute('aria-expanded') === 'false';
+    expand() {
+        this.trigger.setAttribute('aria-expanded', true);
+        this.panel.setAttribute('aria-hidden', false);
+    }
 
-        if (!this.isDisabled) {
-            this.trigger.setAttribute('aria-expanded', state);
-            this.root.querySelector('#' + this.trigger.getAttribute('aria-controls')).setAttribute('aria-hidden', !state)
+    collapse() {
+        this.trigger.setAttribute('aria-expanded', false);
+        this.panel.setAttribute('aria-hidden', true);
+    }
+
+    toggle() {
+        const isExpanded = this.trigger.getAttribute('aria-expanded') === 'true';
+
+        if (isExpanded) {
+            this.collapse()
         } else {
-            event.stopPropagation();
+            this.expand()
         }
     }
 
