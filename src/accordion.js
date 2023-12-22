@@ -64,7 +64,7 @@ class wfaccordion {
         if (this.isTargetOfUrlHash && !this.isDisabled) {
             this.trigger.focus();
 
-            this.root.dispatchEvent(new CustomEvent('wf.accordion.expandedByHash', {
+            this.root.dispatchEvent(new CustomEvent('wf.accordion.expand', {
                 bubbles: true,
                 cancelable: true,
             }));
@@ -102,7 +102,7 @@ class wfaccordion {
 
     events() {
         if (!this.isDisabled) {
-            this.root.addEventListener('wf.accordion.expandedByHash', event => {
+            this.root.addEventListener('wf.accordion.expand', event => {
                 this.expand();
             });
 
