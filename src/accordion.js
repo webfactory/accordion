@@ -61,7 +61,7 @@ class wfaccordion {
             this.panel.setAttribute('aria-hidden', !this.isExpandedOnStartup);
         }
 
-        if (this.isTargetOfUrlHash) {
+        if (this.isTargetOfUrlHash && !this.isDisabled) {
             this.trigger.focus();
 
             this.root.dispatchEvent(new CustomEvent('wf.accordion.expandedByHash', {
@@ -101,18 +101,20 @@ class wfaccordion {
     }
 
     events() {
-        this.root.addEventListener('wf.accordion.expandedByHash', event => {
-            this.toggle(event);
-        });
+        if (!this.isDisabled) {
+            this.root.addEventListener('wf.accordion.expandedByHash', event => {
+                this.expand();
+            });
 
-        // Update ARIA states on click/tap
-        this.trigger.addEventListener('click', (event) => {
-            this.toggle();
+            // Update ARIA states on click/tap
+            this.trigger.addEventListener('click', (event) => {
+                this.toggle();
 
-            if (!this.settings.disableHashUpdate) {
-                this.updateHash();
-            }
-        });
+                if (!this.settings.disableHashUpdate) {
+                    this.updateHash();
+                }
+            });
+        }
     }
 }
 
