@@ -128,8 +128,8 @@ class wfaccordionGroup {
         this.accordions = Array.from(this.group.querySelectorAll(this.settings.accordionRoot))
             .filter(root => this.group === root.parentElement)
             .map((root) => {
-            return new wfaccordion(root, options);
-        });
+                return new wfaccordion(root, options);
+            });
         this.accordionTrigger = this.accordions.map((accordion) => {
             return accordion.trigger
         });
