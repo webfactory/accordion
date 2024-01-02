@@ -28,7 +28,7 @@ export function createAccordionGroup(options) {
 
     document.body.innerHTML = `
         <div class="js-accordion-group">
-            <div ${htmlId} class="js-accordion js-accordion--cke" ${htmlDataAttr}>
+            <div ${htmlId} class="js-accordion" ${htmlDataAttr}>
                 <div class="js-accordion__header">
                     ${placeholderOuterHtml}
                 </div>
@@ -38,6 +38,59 @@ export function createAccordionGroup(options) {
       `;
 }
 
+export function createNestedAccordionGroup(options) {
+    // set defaults
+    options = {
+        ...{
+            outerId: undefined,
+            outerDataAttr: undefined,
+            outerPlaceholder: undefined,
+            outerPlaceholderContent: undefined,
+            outerHasPanel: true,
+
+            innerId: undefined,
+            innerDataAttr: undefined,
+            innerPlaceholder: undefined,
+            innerPlaceholderContent: undefined,
+            innerHasPanel: true,
+        },
+        ...options
+    }
+    let outerHtmlId = options.outerId ? `id="${options.outerId}"` : '';
+    let outerHtmlDataAttr = options.outerDataAttr ?? '';
+    let outerPlaceholderInnerHtml = options.outerPlaceholderContent ? options.outerPlaceholderContent : `Outer title`;
+    let outerPlaceholderOuterHtml = options.outerPlaceholder ? options.outerPlaceholder : `<div class="js-accordion__trigger">${outerPlaceholderInnerHtml}</div>`;
+
+    let innerHtmlId = options.innerId ? `id="${options.innerId}"` : '';
+    let innerHtmlDataAttr = options.innerDataAttr ?? '';
+    let innerPanel = options.innerHasPanel ? `<div class="js-accordion__panel">Inner text</div>` : '';
+
+        let outerPanel = options.outerHasPanel ?
+            `<div class="js-accordion__panel">
+                <p>Outer Text</p>
+                <div class="js-accordion-group">
+                    <div ${innerHtmlId} class="js-accordion nested-inner" ${innerHtmlDataAttr}>
+                        <div class="js-accordion__header">
+                            <div class="js-accordion__trigger">Inner title</div>
+                        </div>
+                        ${innerPanel}
+                    </div>
+                </div>
+            </div>` : '';
+
+    document.body.innerHTML = `
+        <div class="js-accordion-group">
+            <div ${outerHtmlId} class="js-accordion nested-outer" ${outerHtmlDataAttr}>
+                <div class="js-accordion__header">
+                    ${outerPlaceholderOuterHtml}
+                </div>
+                ${outerPanel}
+            </div>
+        </div>
+      `;
+}
+
 export default {
     createAccordionGroup,
+    createNestedAccordionGroup,
 };
