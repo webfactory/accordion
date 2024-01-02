@@ -139,6 +139,21 @@ describe('Simple accordion e2e tests', () => {
         expect(isExpanded(outerAccordion) && isExpanded(innerAccordion)).toBeTruthy();
     });
 
+    test('Accordion ends up expanded on page load when configured to be expanded via data-attr as well as targeted by deep link (hash)', () => {
+        const customId = 'my-deeplinked-accordion';
+
+        createAccordionGroup({id: customId, dataAttr: 'data-wf-accordion-expanded'});
+
+        delete window.location;
+        window.location = new URL(`https://www.example.com#${customId}`);
+
+        wfaccordionsInit();
+
+        const accordion = document.querySelector('.js-accordion');
+
+        expect(isExpanded(accordion)).toBeTruthy();
+    });
+
     test('Accordion can be disabled and have no panel', () => {
         createAccordionGroup({dataAttr: 'data-wf-accordion-disabled', hasPanel: false});
 

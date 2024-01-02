@@ -1,6 +1,6 @@
 {
   "name": "webfactory-accordion",
-  "version": "4.0.2",
+  "version": "5.0.0",
   "description": "A tiny script that progressively enhances static HTML with accessible and keyboard-enabled accordion functionality.",
   "main": "src/main.js",
   "repository": {

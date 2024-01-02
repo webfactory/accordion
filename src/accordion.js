@@ -61,24 +61,33 @@ class wfaccordion {
             this.panel.setAttribute('aria-hidden', !this.isExpandedOnStartup);
         }
 
-        if (this.isTargetOfUrlHash) {
+        if (this.isTargetOfUrlHash && !this.isDisabled) {
             this.trigger.focus();
 
-            this.root.dispatchEvent(new CustomEvent('wf.accordion.expandedByHash', {
+            this.root.dispatchEvent(new CustomEvent('wf.accordion.expand', {
                 bubbles: true,
                 cancelable: true,
             }));
         }
     }
 
-    toggle(event) {
-        const state = this.trigger.getAttribute('aria-expanded') === 'false';
+    expand() {
+        this.trigger.setAttribute('aria-expanded', true);
+        this.panel.setAttribute('aria-hidden', false);
+    }
 
-        if (!this.isDisabled) {
-            this.trigger.setAttribute('aria-expanded', state);
-            this.root.querySelector('#' + this.trigger.getAttribute('aria-controls')).setAttribute('aria-hidden', !state)
+    collapse() {
+        this.trigger.setAttribute('aria-expanded', false);
+        this.panel.setAttribute('aria-hidden', true);
+    }
+
+    toggle() {
+        const isExpanded = this.trigger.getAttribute('aria-expanded') === 'true';
+
+        if (isExpanded) {
+            this.collapse()
         } else {
-            event.stopPropagation();
+            this.expand()
         }
     }
 
@@ -92,18 +101,20 @@ class wfaccordion {
     }
 
     events() {
-        this.root.addEventListener('wf.accordion.expandedByHash', event => {
-            this.toggle(event);
-        });
+        if (!this.isDisabled) {
+            this.root.addEventListener('wf.accordion.expand', event => {
+                this.expand();
+            });
 
-        // Update ARIA states on click/tap
-        this.trigger.addEventListener('click', (event) => {
-            this.toggle();
+            // Update ARIA states on click/tap
+            this.trigger.addEventListener('click', (event) => {
+                this.toggle();
 
-            if (!this.settings.disableHashUpdate) {
-                this.updateHash();
-            }
-        });
+                if (!this.settings.disableHashUpdate) {
+                    this.updateHash();
+                }
+            });
+        }
     }
 }
 
@@ -117,8 +128,8 @@ class wfaccordionGroup {
         this.accordions = Array.from(this.group.querySelectorAll(this.settings.accordionRoot))
             .filter(root => this.group === root.parentElement)
             .map((root) => {
-            return new wfaccordion(root, options);
-        });
+                return new wfaccordion(root, options);
+            });
         this.accordionTrigger = this.accordions.map((accordion) => {
             return accordion.trigger
         });
