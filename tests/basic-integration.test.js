@@ -1,6 +1,6 @@
 import { simulateClick } from './helpers/interactions';
 import { isExpanded, isCollapsed } from './helpers/state';
-import { createAccordionGroup } from "./mocks/accordion.html";
+import { createAccordionGroup, createNestedAccordionGroup } from "./mocks/accordion.html";
 import { wfaccordionsInit } from '../src/accordion';
 
 describe('Simple accordion e2e tests', () => {
@@ -114,6 +114,29 @@ describe('Simple accordion e2e tests', () => {
         const accordion = document.querySelector('.js-accordion');
 
         expect(isExpanded(accordion)).toBeTruthy();
+    });
+
+    test('Nested accordion expands parent accordion if nested accordion is remotely opened', () => {
+        const customOuterId = 'outer-accordion';
+        const customInnerId = 'nested-inner-accordion';
+
+        createNestedAccordionGroup({
+            outerId: customOuterId,
+            innerId: customInnerId,
+        });
+
+        delete window.location;
+        window.location = new URL(`https://www.example.com#${customInnerId}`);
+
+        wfaccordionsInit();
+
+        const outerAccordionTrigger = document.getElementById(customOuterId);
+        const outerAccordion = outerAccordionTrigger.closest('.js-accordion');
+
+        const innerAccordionTrigger = document.getElementById(customInnerId);
+        const innerAccordion = innerAccordionTrigger.closest('.js-accordion');
+
+        expect(isExpanded(outerAccordion) && isExpanded(innerAccordion)).toBeTruthy();
     });
 
     test('Accordion can be disabled and have no panel', () => {
