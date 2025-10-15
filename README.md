@@ -2,6 +2,7 @@
 A tiny script that _progressively enhances_ static HTML with accessible and keyboard-enabled accordion functionality.
 
 ⚠️ **Please note:** 
+- Depending on your requirements and browser support matrix, the [native HTML <details> element](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details) may be sufficient for your accordion use case
 - v4.0.0 and above have dropped jQuery and no longer support Internet Explorer.
 - v2.0.0 and above require a wrapping element around any group of consecutive accordions.
 
