@@ -107,13 +107,20 @@ class wfaccordion {
             });
 
             // Update ARIA states on click/tap
-            this.trigger.addEventListener('click', (event) => {
+            this.trigger.addEventListener('click', () => {
                 this.toggle();
 
                 if (!this.settings.disableHashUpdate) {
                     this.updateHash();
                 }
             });
+
+            // Expand if being targeted by an in-page anchor link
+            this.trigger.addEventListener('focus', () => {
+                if (this.triggerId === getUrlHash()) {
+                    this.expand();
+                }
+            })
         }
     }
 }
