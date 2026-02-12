@@ -114,6 +114,13 @@ class wfaccordion {
                     this.updateHash();
                 }
             });
+
+            // Expand if being targeted by an in-page anchor link
+            this.trigger.addEventListener('focus', () => {
+                if (this.triggerId === getUrlHash()) {
+                    this.expand();
+                }
+            })
         }
     }
 }
