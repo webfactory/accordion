@@ -107,7 +107,7 @@ class wfaccordion {
             });
 
             // Update ARIA states on click/tap
-            this.trigger.addEventListener('click', (event) => {
+            this.trigger.addEventListener('click', () => {
                 this.toggle();
 
                 if (!this.settings.disableHashUpdate) {
