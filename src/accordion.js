@@ -133,7 +133,7 @@ class wfaccordionGroup {
             ...options
         };
         this.accordions = Array.from(this.group.querySelectorAll(this.settings.accordionRoot))
-            .filter(root => this.group === root.parentElement)
+            .filter(root => this.group === root.closest(this.settings.accordionGroup))
             .map((root) => {
                 return new wfaccordion(root, options);
             });
