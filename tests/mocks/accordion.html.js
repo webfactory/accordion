@@ -7,6 +7,7 @@
  * @param {string} options.placeholder – e.g. `<button class="js-accordion__trigger">…</button>`
  * @param {string} options.placeholderContent – e.g. `I am <strong>`
  * @param {boolean} options.hasPanel – optional param to simulate an accordion without panel
+ * @param {boolean} options.hasAdditionalWrappers – optional param to simulate more complicated markup
  */
 export function createAccordionGroup(options) {
     // set defaults
@@ -16,7 +17,8 @@ export function createAccordionGroup(options) {
             dataAttr: undefined,
             placeholder: undefined,
             placeholderContent: undefined,
-            hasPanel: true
+            hasPanel: true,
+            hasAdditionalWrappers: false,
         },
         ...options
     }
@@ -25,15 +27,19 @@ export function createAccordionGroup(options) {
     let placeholderInnerHtml = options.placeholderContent ? options.placeholderContent : `Title`;
     let placeholderOuterHtml = options.placeholder ? options.placeholder : `<div class="js-accordion__trigger">${placeholderInnerHtml}</div>`;
     let panel = options.hasPanel ? `<div class="js-accordion__panel">Text</div>` : '';
+    let additionalWrapperOpen = options.hasAdditionalWrappers ? '<div class="some"><div class="wrapper">' : '';
+    let additionalWrapperClose = options.hasAdditionalWrappers ? '</div></div>' : '';
 
     document.body.innerHTML = `
         <div class="js-accordion-group">
+            ${additionalWrapperOpen}
             <div ${htmlId} class="js-accordion" ${htmlDataAttr}>
                 <div class="js-accordion__header">
                     ${placeholderOuterHtml}
                 </div>
                 ${panel}
             </div>
+            ${additionalWrapperClose}
         </div>
       `;
 }

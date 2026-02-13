@@ -116,6 +116,19 @@ describe('Simple accordion e2e tests', () => {
         expect(isExpanded(accordion)).toBeTruthy();
     });
 
+    test('Accordion with more complicated markup and additional wrappers can be opened', () => {
+        createAccordionGroup({hasAdditionalWrappers: true});
+
+        wfaccordionsInit();
+
+        const accordion = document.querySelector('.js-accordion');
+        const trigger = accordion.querySelector('.js-accordion__trigger');
+
+        simulateClick(trigger);
+
+        expect(isExpanded(accordion)).toBeTruthy();
+    });
+
     test('Nested accordion expands parent accordion if nested accordion is remotely opened', () => {
         const customOuterId = 'outer-accordion';
         const customInnerId = 'nested-inner-accordion';
