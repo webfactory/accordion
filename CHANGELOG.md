@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.1.4]
+### Fixed
+- Fixes a bug where disabled accordions (`data-wf-accordion-disabled`) still responded to clicks — an initialization-order bug caused the click/focus listeners to be attached regardless of the disabled state, because `events()` ran before `isDisabled` was assigned.
+
 ## [5.0.0]
 ### Breaking
 - Changes event name to expand an accordion from `wf.accordion.expandedByHash` to more generic `wf.accordion.expand`
