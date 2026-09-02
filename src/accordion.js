@@ -39,15 +39,15 @@ class wfaccordion {
         // get a fresh reference after enhancements
         this.trigger = this.root.querySelector(this.settings.accordionTrigger);
 
-        this.events();
-
-        // Prevent duplicated IDs on root and trigger element
-        this.root.removeAttribute('id');
-
         // Get initial state
         this.isDisabled = this.root.hasAttribute('data-wf-accordion-disabled');
         this.isTargetOfUrlHash = this.triggerId === getUrlHash();
         this.isExpandedOnStartup = this.root.hasAttribute('data-wf-accordion-expanded');
+
+        this.events();
+
+        // Prevent duplicated IDs on root and trigger element
+        this.root.removeAttribute('id');
 
         // Create ARIA relationships between headers and panels and set initial state
         this.trigger.setAttribute('id', this.triggerId);

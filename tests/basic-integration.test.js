@@ -167,6 +167,19 @@ describe('Simple accordion e2e tests', () => {
         expect(isExpanded(accordion)).toBeTruthy();
     });
 
+    test('Disabled accordion does not respond to clicks', () => {
+        createAccordionGroup({dataAttr: 'data-wf-accordion-disabled'});
+
+        wfaccordionsInit();
+
+        const accordion = document.querySelector('.js-accordion');
+        const trigger = accordion.querySelector('.js-accordion__trigger');
+
+        simulateClick(trigger);
+
+        expect(isCollapsed(accordion)).toBeTruthy();
+    });
+
     test('Accordion can be disabled and have no panel', () => {
         createAccordionGroup({dataAttr: 'data-wf-accordion-disabled', hasPanel: false});
 
